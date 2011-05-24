@@ -1,0 +1,12 @@
+%%% -*- mode: erlang -*-
+
+{application, celestial,
+ [
+  {description, "Celestial library"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {applications, [kernel, stdlib, sasl]},
+  {modules, [hibari, lib
+            ]},
+  {env, []}
+ ]}.
