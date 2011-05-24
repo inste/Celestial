@@ -8,9 +8,9 @@
 {application, celestial_app,
 	[{description, "KVDB Celestial library"},
 		{vsn, 0.1},
-		{modules, [celestial_app, hibari, lib]},
+		{modules, [hibari, lib]},
 		{registered, []},
 		{applications, [kernel,stdlib]},
-		{mod, {celestial_app, []}}
+		{mod, hibari, []}}
 	]
 }.
