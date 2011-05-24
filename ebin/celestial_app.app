@@ -7,7 +7,7 @@
 
 {application, celestial_app,
 	[{description, "KVDB Celestial library"},
-		{vsn, 0.1},
+		{vsn, 0.1.0},
 		{modules, [hibari, lib]},
 		{registered, []},
 		{applications, [kernel,stdlib]},
