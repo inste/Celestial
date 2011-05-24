@@ -11,6 +11,6 @@
 		{modules, [hibari, lib]},
 		{registered, []},
 		{applications, [kernel,stdlib]},
-		{mod, hibari, []}}
+		{mod, {hibari, []}}
 	]
 }.
