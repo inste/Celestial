@@ -13,11 +13,11 @@
 
 %% ------------ Some typical messages ------------------------------------------
 %% Everything's all right
--define(R_DB_OK, #db_reply{type = ok}).
+-define(C_OK, #db_reply{type = ok}).
 
 %% Error replies
--define(E_DB_GENERAL, #db_reply{type = error}).
--define(E_DB_ERROR, #db_reply{type = error, infocode = db_error}).
--define(E_DB_KEY_NOT_EXIST, #db_reply{type = error, infocode = key_not_exist}).
--define(E_DB_TXN_FAIL, #db_reply{type = error, infocode = txn_fail}).
+-define(CE_GENERAL, #db_reply{type = error}).
+-define(CE_DB_ERROR, #db_reply{type = error, infocode = db_error}).
+-define(CE_KEY_NOT_EXIST, #db_reply{type = error, infocode = key_not_exist}).
+-define(CE_TXN_FAIL, #db_reply{type = error, infocode = txn_fail}).
 

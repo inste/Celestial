@@ -108,7 +108,7 @@ do_delete(Key, #db_config{table = Table, flags = Flags,
 			term_to_binary(Key),
 			Flags, Timeout},
 		fun () ->
-			?R_DB_OK end,
+			?C_OK end,
 		Cfg).
 
 do_hibari_cmd(Cmd, Key, Value, #db_config{table = Table,
@@ -120,7 +120,7 @@ do_hibari_cmd(Cmd, Key, Value, #db_config{table = Table,
 			term_to_binary(Value),
 			Exptime, Flags, Timeout},
 		fun () ->
-			?R_DB_OK end,
+			?C_OK end,
 		Cfg).
 
 
@@ -132,7 +132,7 @@ do_txn(OpList, #db_config{table = Table, flags = Flags,
 			(txn_answer, List) ->
 				handle_txn_results(List);
 			(txn_fail, _) ->
-				?E_DB_TXN_FAIL
+				?CE_TXN_FAIL
 		end,
 		Cfg).
 
@@ -152,9 +152,9 @@ pass_hibari_request(Req, Fun, Cfg) ->
 		{reply, {txn_fail, List}, none} ->
 			Fun(txn_fail, List);
 		{reply, key_not_exist, none} ->
-			?E_DB_KEY_NOT_EXIST;
+			?CE_KEY_NOT_EXIST;
 		_Other ->
-			?E_DB_ERROR
+			?CE_DB_ERROR
 	end.
 
 %% -----------------------------------------------------------------------------
@@ -171,7 +171,7 @@ do_hibari_request(Req, #db_config{host = Host, port = Port,
 				ubf_client:stop(Pid),
 				Res;
 			{error, _Smth} ->
-				?E_DB_ERROR
+				?CE_DB_ERROR
 	end.
 
 %% -----------------------------------------------------------------------------
@@ -202,5 +202,5 @@ handle_txn_results(ResList) ->
 			#db_reply{type = ok, infocode = txn_res,
 				value = Read};
 		{X, _} when (X =/= 0) ->
-			?E_DB_TXN_FAIL
+			?CE_TXN_FAIL
 	end.
