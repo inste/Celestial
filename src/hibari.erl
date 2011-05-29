@@ -1,15 +1,16 @@
 %%% ----------------------------------------------------------------------------
 %%%     @title          Hibari operations handling unit
 %%%     @author         Ilya Ponetayev <Ilya.Ponetaev@kodep.ru>
-%%%     @version        0.1
+%%%     @version        0.2
 %%%     Part of celestial library
 %%% ----------------------------------------------------------------------------
 -module(hibari).
 
--vsn(0.1).
+-vsn(0.2).
 
 -export([make_add/2, make_add/3, make_add/4, make_add/5]).
 -export([make_set/2, make_set/3, make_set/4, make_set/5]).
+-export([make_get/2, make_get/1]).
 -export([make_txn/2, make_txn/3, make_txn/4]).
 -export([do_add/3, do_set/3, do_replace/3]).
 -export([do_get/2, do_get_ts/2]).
@@ -52,6 +53,14 @@ make_set(Key, Value, TS) ->
 make_set(Key, Value) ->
 	make_set(Key, Value, lib:make_ts()).
 
+%% -----------------------------------------------------------------------------
+%% Make get operation
+%% -----------------------------------------------------------------------------
+make_get(Key, Flags) ->
+	{get, term_to_binary(Key), Flags}.
+
+make_get(Key) ->
+	make_get(Key, ?HIBARI_DEFAULT_FLAGS).
 
 %% -----------------------------------------------------------------------------
 %% Make transaction
@@ -183,8 +192,9 @@ handle_txn_results(ResList) ->
 			fun
 				(ok, Acc) ->
 					Acc;
-				({ok, _TS, _BinKey} = A, {R, E}) ->
-					{[A | R], E};
+				({ok, TS, BinKey} = A, {R, E}) ->
+					{[{ok, TS, binary_to_term(BinKey)}
+						| R], E};
 				({ok, _TS} = A, {R, E}) ->
 					{[A | R], E};
 				(key_not_exist, {R, E}) ->
