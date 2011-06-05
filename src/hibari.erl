@@ -1,16 +1,17 @@
 %%% ----------------------------------------------------------------------------
 %%%     @title          Hibari operations handling unit
 %%%     @author         Ilya Ponetayev <Ilya.Ponetaev@kodep.ru>
-%%%     @version        0.2
+%%%     @version        0.3
 %%%     Part of celestial library
 %%% ----------------------------------------------------------------------------
 -module(hibari).
 
--vsn(0.2).
+-vsn(0.3).
 
 -export([make_add/2, make_add/3, make_add/4, make_add/5]).
 -export([make_set/2, make_set/3, make_set/4, make_set/5]).
 -export([make_get/2, make_get/1]).
+-export([make_delete/2, make_delete/1]).
 -export([make_txn/2, make_txn/3, make_txn/4]).
 -export([do_add/3, do_set/3, do_replace/3]).
 -export([do_get/2, do_get_ts/2]).
@@ -61,6 +62,16 @@ make_get(Key, Flags) ->
 
 make_get(Key) ->
 	make_get(Key, ?HIBARI_DEFAULT_FLAGS).
+
+%% -----------------------------------------------------------------------------
+%% Make delete operation
+%% -----------------------------------------------------------------------------
+
+make_delete(Key, Flags) ->
+	{delete, term_to_binary(Key), Flags}.
+
+make_delete(Key) ->
+	make_delete(Key, ?HIBARI_DEFAULT_FLAGS}.
 
 %% -----------------------------------------------------------------------------
 %% Make transaction
