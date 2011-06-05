@@ -71,7 +71,7 @@ make_delete(Key, Flags) ->
 	{delete, term_to_binary(Key), Flags}.
 
 make_delete(Key) ->
-	make_delete(Key, ?HIBARI_DEFAULT_FLAGS}.
+	make_delete(Key, ?HIBARI_DEFAULT_FLAGS).
 
 %% -----------------------------------------------------------------------------
 %% Make transaction
