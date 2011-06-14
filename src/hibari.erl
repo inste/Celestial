@@ -203,7 +203,7 @@ handle_txn_results(ResList) ->
 			fun
 				(ok, Acc) ->
 					Acc;
-				({ok, TS, BinKey} = A, {R, E}) ->
+				({ok, TS, BinKey}, {R, E}) ->
 					{[{ok, TS, binary_to_term(BinKey)}
 						| R], E};
 				({ok, _TS} = A, {R, E}) ->
