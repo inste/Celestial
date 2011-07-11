@@ -15,7 +15,7 @@
 -export([make_txn/2, make_txn/3, make_txn/4]).
 -export([do_add/3, do_set/3, do_replace/3]).
 -export([do_get/2, do_get_ts/2]).
--export([do_delete/2, do_txn/2]).
+-export([do_delete/2, do_txn/2, do_get_txn/2]).
 
 -include("defaults.hrl").
 -include("db_reply.hrl").
@@ -250,6 +250,7 @@ handle_get_mtxn_results(ResList) ->
 			(_Other, {R, U}) ->
 				{R, [undefined | U]}
 		end,
+		{[], []},
 		lists:reverse(ResList)),
 	case {length(Read), length(Unknown)} of
 		{0, 0} ->
