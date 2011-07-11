@@ -156,6 +156,18 @@ do_txn(OpList, #db_config{table = Table, flags = Flags,
 		end,
 		Cfg).
 
+do_get_txn(OpList, #db_config{table = Table, flags = Flags,
+	timeout = Timeout} = Cfg) ->
+	pass_hibari_request(
+		make_txn(Table, OpList, Timeout, Flags),
+		fun
+			(txn_answer, List) ->
+				handle_get_mtxn_results(List);
+			(txn_fail, _) ->
+				?CE_TXN_FAIL
+		end,
+		Cfg).
+
 %% -----------------------------------------------------------------------------
 %% Hibari reply handling function
 %% -----------------------------------------------------------------------------
@@ -223,5 +235,29 @@ handle_txn_results(ResList) ->
 			#db_reply{type = ok, infocode = txn_res,
 				value = Read};
 		{X, _} when (X =/= 0) ->
+			?CE_TXN_FAIL
+	end.
+
+handle_get_mtxn_results(ResList) ->
+	{Read, Unknown} = lists:foldl(
+		fun
+			({ok, TS, BinData}, {R, U}) ->
+				{[{ok, TS, binary_to_term(BinData)} | R], U};
+			({ok, _TS} = Read, {R, U}) ->
+				{[Read | R], U} ;
+			(key_not_exist, D) ->
+				D;
+			(_Other, {R, U}) ->
+				{R, [undefined | U]}
+		end,
+		lists:reverse(ResList)),
+	case {length(Read), length(Unknown)} of
+		{0, 0} ->
+			#db_reply{type = ok, infocode = txn_res,
+				value = undefined};
+		{Y, 0} when Y > 0 ->
+			#db_reply{type = ok, infocode = txn_res,
+				value = Read};
+		{_, Z} when Z =/= 0 ->
 			?CE_TXN_FAIL
 	end.
